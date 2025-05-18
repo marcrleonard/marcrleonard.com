@@ -15,9 +15,9 @@ This is my setup using `pre-commit`, `aspell`, and `languagetool` to automatical
 
 ## 🛠 Tools Used
 
-- [`pre-commit`](https://pre-commit.com): Git hook manager
-- [`aspell`](http://aspell.net/): Spell checker
-- [`languagetool`](https://languagetool.org/): Grammar checker (CLI required)
+- [`pre-commit`](https://pre-commit.com): Git hook manager `pipx install pre-commit` 
+- [`aspell`](http://aspell.net/): Spell checker `brew install aspell`
+- [`languagetool`](https://languagetool.org/): Grammar checker `brew install languagetool`
 
 These tools integrate cleanly into your local development workflow without linting untouched lines or scanning the entire codebase.
 
