@@ -168,8 +168,9 @@ import letterboxd
 movies_by_year = letterboxd.get_watched_films_from_rss()
 
 # render all pages. some are nav pages and some are not in the nav
-pages_nav.extend(addl_pages)
-for url, title, html_file in pages_nav:
+all_pages = pages_nav
+all_pages.extend(addl_pages)
+for url, title, html_file in all_pages:
 	output_location = f"{BUILD_FOLDER}{url}"
 	os.makedirs(output_location, exist_ok=True)
 	with open(f'{output_location}/index.html', 'w') as f:
