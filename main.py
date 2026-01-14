@@ -180,6 +180,7 @@ folders_to_copy = [
 	(f'{SOURCE_FOLDER}/css/', f'{BUILD_FOLDER}/css/'),
 	(f'{SOURCE_FOLDER}/img/', f'{BUILD_FOLDER}/img/'),
 	(f'{SOURCE_FOLDER}/js/', f'{BUILD_FOLDER}/js/'),
+	(f'{SOURCE_FOLDER}/assets/', f'{BUILD_FOLDER}/assets/'),
 
 ]
 
