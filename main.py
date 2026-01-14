@@ -83,6 +83,12 @@ pages_nav = [
 	("/odds-ends", "odds & ends", "pages/ponderings.html"),
 ]
 
+# these are pages that are not in the nav but exist
+addl_pages = [
+	# url, title, html file
+	("/resume", "_", "pages/resume.html"),
+]
+
 
 env = Environment(
 	loader=PackageLoader(SOURCE_FOLDER, '_templates'),
@@ -161,7 +167,10 @@ import letterboxd
 
 movies_by_year = letterboxd.get_watched_films_from_rss()
 
-for url, title, html_file in pages_nav:
+# render all pages. some are nav pages and some are not in the nav
+all_pages = pages_nav.copy()
+all_pages.extend(addl_pages)
+for url, title, html_file in all_pages:
 	output_location = f"{BUILD_FOLDER}{url}"
 	os.makedirs(output_location, exist_ok=True)
 	with open(f'{output_location}/index.html', 'w') as f:
@@ -180,6 +189,7 @@ folders_to_copy = [
 	(f'{SOURCE_FOLDER}/css/', f'{BUILD_FOLDER}/css/'),
 	(f'{SOURCE_FOLDER}/img/', f'{BUILD_FOLDER}/img/'),
 	(f'{SOURCE_FOLDER}/js/', f'{BUILD_FOLDER}/js/'),
+	(f'{SOURCE_FOLDER}/assets/', f'{BUILD_FOLDER}/assets/'),
 
 ]
 
