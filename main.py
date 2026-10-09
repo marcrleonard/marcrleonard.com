@@ -193,6 +193,10 @@ folders_to_copy = [
 
 ]
 
+# redesign concepts are only published on preview builds, never on master
+if os.environ.get("CF_PAGES_BRANCH") != "master":
+	folders_to_copy.append(('designs/', f'{BUILD_FOLDER}/designs/'))
+
 
 def recursivly_copy_folders(source_dir, target_dir):
 	if not pathlib.Path(source_dir).exists():
