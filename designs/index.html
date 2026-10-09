@@ -3,6 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="shared.css">
+<script src="vt.js"></script>
 <style>
 /* Index of three directions: a plain Swiss list, each row a big thumbnail that lifts on hover. */
 .intro { padding-block: clamp(32px, 6vw, 72px) 32px; }
@@ -40,7 +41,7 @@
         <p>A giant name with your photo laid over it and drifting on scroll. Below it, four full-width cards (now, building, before, writing) pin and pile on top of each other as you scroll. Each one recedes as the next slides over.</p>
         <span class="go">open stack →</span>
       </div>
-      <div class="shot"><img src="img/thumb-a.jpg" alt="Preview of the Stack concept"></div>
+      <div class="shot"><img style="view-transition-name: hero-stack" src="img/thumb-a.jpg" alt="Preview of the Stack concept"></div>
     </a>
     <a class="row" href="deck.html">
       <div>
@@ -49,7 +50,7 @@
         <p>The hero is a cascade of project cards that shuffles itself every few seconds and tilts toward your cursor: a live timecode adder, an asset bin, a LineDream plot. Experience is a fan of overlapping index cards that spread open on hover.</p>
         <span class="go">open deck →</span>
       </div>
-      <div class="shot"><img src="img/thumb-b.jpg" alt="Preview of the Deck concept"></div>
+      <div class="shot"><img style="view-transition-name: hero-deck" src="img/thumb-b.jpg" alt="Preview of the Deck concept"></div>
     </a>
     <a class="row" href="grid.html">
       <div>
@@ -58,7 +59,7 @@
         <p>The 12-column grid drawn right on the page (press G to toggle). The red band and clipped headline come from your experience page. Hard-shadow cards break across columns and overlap, drifting at different speeds, and a slow ticker runs underneath.</p>
         <span class="go">open grid →</span>
       </div>
-      <div class="shot"><img src="img/thumb-c.jpg" alt="Preview of the Grid concept"></div>
+      <div class="shot"><img style="view-transition-name: hero-grid" src="img/thumb-c.jpg" alt="Preview of the Grid concept"></div>
     </a>
   </div>
 </div>

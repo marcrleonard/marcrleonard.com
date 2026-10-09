@@ -3,3 +3,25 @@ h1 {
     font-weight: 400;
     margin-top: 0px;
 }
+
+/* Page transitions between same-origin pages (cross-document view transitions).
+   Unsupported browsers just navigate normally. The header holds still, the red
+   title band morphs between pages, and the content rises in. */
+@view-transition { navigation: auto; }
+
+.cavani_tm_header { view-transition-name: site-header; }
+.full-width-page-title { view-transition-name: page-title; }
+
+::view-transition-group(*) {
+    animation-duration: .45s;
+    animation-timing-function: cubic-bezier(.2, .8, .2, 1);
+}
+::view-transition-old(root) { animation: .3s ease-out both vt-out; }
+::view-transition-new(root) { animation: .45s cubic-bezier(.2, .8, .2, 1) .05s both vt-in; }
+
+@keyframes vt-out { to { opacity: 0; transform: scale(.985); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(24px); } }
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

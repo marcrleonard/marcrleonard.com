@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="shared.css">
+<script src="vt.js"></script>
 <style>
 /* Concept C — Grid: the 12-column grid is drawn on the page, the red band and
    clipped headline come from the current site, and cards break across columns
@@ -140,7 +141,7 @@ main, .site-head, footer { position: relative; z-index: 1; }
 </header>
 
 <main>
-  <section class="band">
+  <section class="band" style="view-transition-name: hero-grid">
     <div class="wrap">
       <div class="meta"><span class="label">software developer · media &amp; entertainment</span><span class="tc" data-tc></span></div>
       <h1 id="headline">marc leonard</h1>
@@ -211,7 +212,7 @@ main, .site-head, footer { position: relative; z-index: 1; }
   </section>
 </main>
 
-<a class="back" href="index.html">← concepts</a>
+<nav class="switcher" aria-label="Concepts"><a href="index.html">all</a><a href="stack.html">stack</a><a href="deck.html">deck</a><span aria-current="page">grid</span></nav>
 <button class="toggle" id="gt" type="button">grid: on</button>
 
 <script src="shared.js"></script>

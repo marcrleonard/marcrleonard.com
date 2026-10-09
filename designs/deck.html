@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="shared.css">
+<script src="vt.js"></script>
 <style>
 /* Concept B — Deck: a cascade of big project cards that slowly shuffles itself,
    and a career laid out as overlapping index cards that fan open on hover. */
@@ -129,7 +130,7 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" style="view-transition-name: hero-deck">
   <div class="wrap">
     <div class="hello">
       <span class="tc" data-tc></span>
@@ -199,7 +200,7 @@
   </div>
 </section>
 
-<a class="back" href="index.html">← concepts</a>
+<nav class="switcher" aria-label="Concepts"><a href="index.html">all</a><a href="stack.html">stack</a><span aria-current="page">deck</span><a href="grid.html">grid</a></nav>
 
 <script src="shared.js"></script>
 <script>

@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="shared.css">
+<script src="vt.js"></script>
 <style>
 /* Concept A — Stack: giant name with a photo card laid over it, then full-width
    cards that pin and pile on top of each other as you scroll. */
@@ -128,7 +129,7 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" style="view-transition-name: hero-stack">
   <div class="wrap">
     <h1 class="name"><span><i>marc</i></span><span><i>leonard</i></span></h1>
     <figure class="photo-card" id="photo" style="margin:0">
@@ -212,7 +213,7 @@
   </div>
 </footer>
 
-<a class="back" href="index.html">← concepts</a>
+<nav class="switcher" aria-label="Concepts"><a href="index.html">all</a><span aria-current="page">stack</span><a href="deck.html">deck</a><a href="grid.html">grid</a></nav>
 
 <script src="shared.js"></script>
 <script>
