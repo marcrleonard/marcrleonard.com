@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Round 2 · marc leonard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&display=swap">
+<style>
+/* Round 2: bold but quiet. Hard-shadow cards from the Grid hero, sections as
+   sheets that overlap as you scroll (plain sticky, no scaling), Odds & Ends
+   cards with a big red year. Motion = scroll, hover, one short settle on load. */
+:root {
+  --paper: #f6f9fc;
+  --card: #ffffff;
+  --ink: #111316;
+  --muted: #5d6673;
+  --line: #dde3ea;
+  --red: #da291c;
+  --on-red: #ffffff;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --gutter: clamp(16px, 4vw, 48px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0e1013; --card: #171a1f; --ink: #eef1f4; --muted: #98a2ae; --line: #2a3038; --red: #e8392b; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0e1013; --card: #171a1f; --ink: #eef1f4; --muted: #98a2ae; --line: #2a3038; --red: #e8392b; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--sans); overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; text-decoration: underline dotted var(--red); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a:hover { text-decoration-style: solid; }
+a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: var(--gutter); }
+.cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 20px; }
+
+/* header: same as today */
+.site-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--paper); border-bottom: 1px solid transparent; transition: border-color .3s; view-transition-name: site-head; }
+.site-head.scrolled { border-color: var(--line); }
+.site-head .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 18px; }
+.logo { font-size: 22px; letter-spacing: -0.01em; }
+.site-head nav { display: flex; gap: clamp(14px, 2.4vw, 28px); flex-wrap: wrap; }
+.site-head nav span { color: var(--muted); }
+
+/* the card language: 2px ink border + hard offset shadow */
+.hard { background: var(--card); border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+a.hard, .lift { transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
+a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ink); }
+
+/* ---------- hero ---------- */
+.hero { padding-block: clamp(32px, 6vw, 80px) clamp(64px, 9vw, 128px); }
+.hero .cols { align-items: start; }
+.photo { grid-column: 1 / span 5; grid-row: 1; margin: 0; padding: 10px; box-shadow: 8px 8px 0 var(--red); border-color: var(--ink); position: relative; z-index: 1; }
+.photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; width: 100%; }
+.intro { grid-column: 5 / span 8; grid-row: 1; margin-top: clamp(56px, 9vw, 120px); padding: clamp(24px, 3.6vw, 48px); position: relative; z-index: 2; }
+.intro h1 { font-size: clamp(30px, 3.6vw, 48px); font-weight: 750; letter-spacing: -0.04em; line-height: 1.04; }
+.intro h1 em { font-style: normal; color: var(--red); }
+.intro p { margin-top: 20px; color: var(--muted); max-width: 54ch; }
+.intro p strong { color: var(--ink); font-weight: 600; }
+.intro .links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; font-weight: 500; }
+
+/* one short settle on load: cards land 10px into place */
+.settle { animation: settle .7s var(--ease) both; }
+.intro.settle { animation-delay: .12s; }
+@keyframes settle { from { opacity: 0; transform: translate(10px, 10px); box-shadow: 0 0 0 var(--ink); } }
+
+/* ---------- sheets: sections that overlap as you scroll ---------- */
+.sheets { display: grid; gap: 32px; padding-bottom: 96px; }
+.sheet { position: sticky; top: calc(68px + var(--i) * 14px); padding: clamp(24px, 4vw, 52px); border: 2px solid var(--ink); }
+.sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px); }
+.sheet h2 { font-size: clamp(36px, 5.4vw, 72px); font-weight: 800; letter-spacing: -0.055em; line-height: .9; }
+.kicker { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+
+.s-build { background: var(--red); color: var(--on-red); border-color: var(--red); }
+.s-build .kicker { color: inherit; opacity: .8; }
+.s-exp { background: var(--card); }
+.s-notes { background: var(--paper); }
+
+/* building: three cards inside the red sheet */
+.projects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.proj { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 22px; min-height: 230px; text-decoration: none; color: var(--ink); }
+.proj h3 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 750; letter-spacing: -0.04em; line-height: 1; }
+.proj p { margin-top: 10px; color: var(--muted); font-size: 15px; }
+.proj .meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.proj .meta b { color: var(--red); font-weight: 600; }
+
+/* experience: a quiet table */
+.jobs { list-style: none; margin: 0; padding: 0; }
+.jobs li { padding-block: 18px; border-top: 1px solid var(--line); align-items: baseline; row-gap: 4px; }
+.jobs li:last-child { border-bottom: 1px solid var(--line); }
+.jobs .yr { grid-column: 1 / span 2; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.jobs .now .yr { color: var(--red); font-weight: 600; }
+.jobs .what { grid-column: 3 / span 4; font-size: clamp(19px, 1.8vw, 23px); font-weight: 700; letter-spacing: -0.025em; }
+.jobs .why { grid-column: 7 / span 6; color: var(--muted); }
+
+/* odds & ends: cards with a big red year */
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.note { display: flex; flex-direction: column; justify-content: space-between; gap: 36px; min-height: 190px; padding: 20px; text-decoration: none; background: var(--card); border: 1px solid var(--line); transition: border-color .2s, transform .35s var(--ease); }
+.note:hover, .note:focus-visible { border-color: var(--ink); transform: translateY(-3px); }
+.note .t { font-size: 18px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.28; }
+.note .bot { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
+.note .y { font-size: 44px; font-weight: 800; letter-spacing: -0.05em; line-height: .8; color: var(--red); font-variant-numeric: tabular-nums; }
+.note .tag { font-size: 13px; color: var(--muted); }
+
+.foot { padding-block: 24px 120px; }
+.foot .inner { display: flex; justify-content: space-between; align-items: baseline; gap: 16px 32px; flex-wrap: wrap; border-top: 2px solid var(--ink); padding-top: 28px; }
+.foot .big { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
+.foot nav { display: flex; gap: 24px; flex-wrap: wrap; }
+
+.switcher {
+  position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60; view-transition-name: switcher;
+  display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--ink); color: var(--paper);
+  font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .06em;
+}
+.switcher a, .switcher span { padding: 6px 10px; border-radius: 999px; text-decoration: none; color: inherit; }
+.switcher a { opacity: .7; }
+.switcher span { background: var(--red); color: var(--on-red); }
+
+/* page transitions: the same quiet fade-and-rise as the live site */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: .25s ease-out both vt-out; }
+::view-transition-new(root) { animation: .4s var(--ease) .05s both vt-in; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(16px); } }
+
+@media (max-width: 900px) {
+  .projects, .notes { grid-template-columns: 1fr 1fr; }
+  .projects .proj:last-child, .notes .note:nth-child(n+5) { display: none; }
+}
+@media (max-height: 720px) { .sheet { position: static; } }
+@media (max-width: 760px) {
+  .photo { grid-column: 1 / span 9; }
+  .intro { grid-column: 2 / -1; grid-row: 2; margin-top: -72px; }
+  .sheet { position: static; }
+  .projects, .notes { grid-template-columns: 1fr; }
+  .projects .proj:last-child, .notes .note:nth-child(n+5) { display: flex; }
+  .jobs .yr, .jobs .what, .jobs .why { grid-column: 1 / -1; }
+  .hard { box-shadow: 6px 6px 0 var(--ink); }
+  .photo { box-shadow: 6px 6px 0 var(--red); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-head" id="head">
+  <div class="wrap">
+    <div class="logo">marc leonard</div>
+    <nav><span>home</span><a href="#">about</a><a href="#exp">experience</a><a href="#notes">odds &amp; ends</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap cols">
+    <figure class="photo hard settle">
+      <img src="img/me_2.jpg" alt="Marc on a beach holding a camera on a monopod">
+    </figure>
+    <div class="intro hard settle">
+      <h1>Software developer, <em>15+ years</em> in media &amp; entertainment.</h1>
+      <p>I work on the <strong>Ingest and Processing</strong> team at <a href="https://mux.com">Mux</a>. Before code I was a video director and wore most of the hats in post-production. I live in Bozeman, Montana.</p>
+      <div class="links"><a href="#">About me</a><a href="https://marcrleonard.com/resume">Résumé</a><a href="https://video.marcrleonard.com">Director reel</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap sheets">
+
+  <section class="sheet s-build" style="--i:0" aria-labelledby="h-build">
+    <div class="sheet-head"><h2 id="h-build">in the hopper</h2><span class="kicker">side projects</span></div>
+    <div class="projects">
+      <a class="proj hard" href="https://timecodetool.com/">
+        <div><h3>TimecodeTool</h3><p>A timecode CLI for validation and calculations.</p></div>
+        <div class="meta"><span>CLI</span><b>2024 —</b></div>
+      </a>
+      <a class="proj hard" href="https://assetveranda.com">
+        <div><h3>Asset Veranda</h3><p>Media asset management for producers and editors.</p></div>
+        <div class="meta"><span>Web app</span><b>2023 —</b></div>
+      </a>
+      <a class="proj hard" href="https://linedream.marcrleonard.com">
+        <div><h3>LineDream</h3><p>A generative art library for Python, made for pen plotters.</p></div>
+        <div class="meta"><span>Python library</span><b>2020 —</b></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sheet s-exp" id="exp" style="--i:1" aria-labelledby="h-exp">
+    <div class="sheet-head"><h2 id="h-exp">experience</h2><a href="https://marcrleonard.com/resume">PDF résumé</a></div>
+    <ol class="jobs">
+      <li class="cols now"><span class="yr">2024 — now</span><span class="what">Mux</span><span class="why">Video software developer, Ingest and Processing.</span></li>
+      <li class="cols"><span class="yr">2017 — 2024</span><span class="what">Cinnafilm</span><span class="why">Core backend developer for PixelStrings, a cloud video conversion platform.</span></li>
+      <li class="cols"><span class="yr">2012 — 2019</span><span class="what">Director &amp; post</span><span class="why">Freelance for L.L.Bean, Outside Online, GoPro, The Verge, Reddit and Pop Sci.</span></li>
+      <li class="cols"><span class="yr">2011 — 2013</span><span class="what">Reelz Channel</span><span class="why">Lead editor of special programming.</span></li>
+    </ol>
+  </section>
+
+  <section class="sheet s-notes" id="notes" style="--i:2" aria-labelledby="h-notes">
+    <div class="sheet-head"><h2 id="h-notes">odds &amp; ends</h2><span class="kicker">notes</span></div>
+    <div class="notes">
+      <a class="note" href="https://marcrleonard.com/blog/2026/1/cmaf-vs-ts-metadata"><span class="t">Transport Stream vs CMAF: different philosophies for streaming metadata</span><span class="bot"><span class="y">26</span><span class="tag">streaming</span></span></a>
+      <a class="note" href="https://marcrleonard.com/blog/2025/5/pre-commit-hooks-spell-grammar"><span class="t">Automatically check spelling and grammar on git commits</span><span class="bot"><span class="y">25</span><span class="tag">development</span></span></a>
+      <a class="note" href="https://marcrleonard.com/blog/2025/2/dead-simple-goroutines-contexts-channels"><span class="t">A dead simple example of goroutines, contexts, and channels</span><span class="bot"><span class="y">25</span><span class="tag">go</span></span></a>
+      <a class="note" href="https://marcrleonard.com/blog/2025/1/understanding-cpu-specific-compilation-flags-and-intrinsics"><span class="t">Understanding CPU-specific compilation flags and intrinsics</span><span class="bot"><span class="y">25</span><span class="tag">til</span></span></a>
+      <a class="note" href="https://marcrleonard.com/blog/2024/7/Python-Object-Scope"><span class="t">Python object scope and reference counting</span><span class="bot"><span class="y">24</span><span class="tag">python</span></span></a>
+      <a class="note" href="https://marcrleonard.com/blog/2024/7/fast-api-async-heavy-work"><span class="t">Running a CPU-heavy task asynchronously in FastAPI</span><span class="bot"><span class="y">24</span><span class="tag">python</span></span></a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot">
+  <div class="wrap"><div class="inner">
+    <div class="big">say hello.</div>
+    <nav><a href="https://www.linkedin.com/in/marc-leonard/">LinkedIn</a><a href="https://github.com/marcrleonard">GitHub</a><a href="https://marcrleonard.com/resume">Résumé</a></nav>
+  </div></div>
+</footer>
+
+<nav class="switcher" aria-label="Concepts"><a href="index.html">all</a><span aria-current="page">round 2</span></nav>
+
+<script>
+// hairline under the header once the page has scrolled
+const head = document.getElementById("head");
+const onScroll = () => head.classList.toggle("scrolled", scrollY > 8);
+addEventListener("scroll", onScroll, { passive: true }); onScroll();
+</script>
+</body>
+</html>
