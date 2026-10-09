@@ -1,0 +1,73 @@
+/* Shared tokens for the redesign concepts.
+   Keeps the current site's DNA: Inter, #DA291C, cool off-white paper, lowercase nav. */
+:root {
+  --paper: #f6f9fc;
+  --card: #ffffff;
+  --ink: #111316;
+  --muted: #5d6673;
+  --line: #dde3ea;
+  --red: #da291c;
+  --on-red: #ffffff;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1280px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1013; --card: #171a1f; --ink: #eef1f4; --muted: #98a2ae; --line: #2a3038;
+    --red: #e8392b; --on-red: #ffffff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1013; --card: #171a1f; --ink: #eef1f4; --muted: #98a2ae; --line: #2a3038;
+  --red: #e8392b; --on-red: #ffffff; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.55 var(--sans);
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+/* the existing site's link treatment: dotted red underline */
+a { color: inherit; text-decoration: underline dotted var(--red); text-underline-offset: 4px; text-decoration-thickness: 2px; }
+a:hover { text-decoration-style: solid; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+
+.site-head {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; flex-wrap: wrap; }
+.site-head .logo { font-size: 22px; font-weight: 400; letter-spacing: -0.01em; }
+.site-head nav { display: flex; gap: clamp(12px, 2.4vw, 28px); font-size: 16px; flex-wrap: wrap; }
+.site-head nav span { color: var(--muted); }
+
+/* running SMPTE timecode: the one detail only this person's site would have */
+.tc { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; letter-spacing: 0.02em; color: var(--muted); }
+.tc b { color: var(--red); font-weight: 500; }
+
+.label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+.back {
+  position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60;
+  font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em;
+  background: var(--ink); color: var(--paper); text-decoration: none; padding: 10px 14px; border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

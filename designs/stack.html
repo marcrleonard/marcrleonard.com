@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stack · marc leonard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Concept A — Stack: giant name with a photo card laid over it, then full-width
+   cards that pin and pile on top of each other as you scroll. */
+
+.hero { position: relative; padding-block: clamp(32px, 6vw, 72px) clamp(48px, 8vw, 120px); }
+.hero .wrap { position: relative; }
+.name {
+  font-weight: 800; letter-spacing: -0.06em; line-height: .8;
+  font-size: clamp(76px, 17vw, 250px); text-transform: lowercase;
+  position: relative; z-index: 1;
+}
+.name span { display: block; overflow: hidden; padding-bottom: .06em; }
+.name span i { display: block; font-style: normal; animation: rise 1s cubic-bezier(.2,.8,.2,1) both; }
+.name span:nth-child(2) i { animation-delay: .08s; color: var(--red); }
+@keyframes rise { from { transform: translateY(100%); } }
+
+.photo-card {
+  position: absolute; z-index: 2; right: var(--gutter); top: clamp(40px, 9vw, 140px);
+  width: min(34%, 400px); aspect-ratio: 4 / 5;
+  background: var(--card); padding: 10px 10px 40px;
+  box-shadow: 0 1px 0 var(--line), 0 30px 60px -30px rgb(0 0 0 / .35);
+  transform: translate3d(0, var(--py, 0px), 0);
+  will-change: transform;
+}
+.photo-card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.photo-card .tc { position: absolute; left: 12px; bottom: 12px; }
+
+.lede {
+  position: relative; z-index: 3; margin-top: clamp(28px, 4vw, 56px);
+  max-width: 34ch; font-size: clamp(20px, 2.3vw, 30px); line-height: 1.25; letter-spacing: -0.015em;
+}
+.lede strong { font-weight: 650; }
+.meta-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 24px; }
+
+/* ---------- the stack ---------- */
+.stack { padding-bottom: 20vh; }
+.stack .wrap { display: grid; gap: 28px; }
+.sheet {
+  --i: 0;
+  position: sticky; top: calc(84px + var(--i) * 26px);
+  min-height: min(560px, 78vh);
+  border-radius: 6px;
+  padding: clamp(24px, 4vw, 56px);
+  display: grid; grid-template-columns: 180px 1fr; gap: clamp(20px, 4vw, 64px);
+  transform-origin: 50% 0;
+  transform: scale(calc(1 - var(--p, 0) * .05));
+  filter: brightness(calc(1 - var(--p, 0) * .12));
+  box-shadow: 0 -1px 0 rgb(0 0 0 / .04), 0 -20px 50px -30px rgb(0 0 0 / .25);
+}
+.sheet > * { min-width: 0; }
+.sheet .tab { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+.sheet .tab .label { color: inherit; opacity: .7; }
+.sheet h2 { font-size: clamp(34px, 5.4vw, 76px); font-weight: 750; letter-spacing: -0.045em; line-height: .95; }
+.sheet .body { display: grid; gap: clamp(24px, 3vw, 40px); align-content: start; }
+.sheet p.big { font-size: clamp(18px, 1.8vw, 23px); line-height: 1.4; max-width: 52ch; }
+
+.s-now { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+.s-build { background: var(--red); color: var(--on-red); }
+.s-build a { text-decoration-color: currentColor; }
+.s-before { background: var(--ink); color: var(--paper); }
+.s-before a { text-decoration-color: var(--red); }
+.s-write { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; border-top: 1px solid var(--line); padding-top: 20px; }
+.facts dt { margin-bottom: 4px; }
+.facts dd { margin: 0; font-size: 17px; }
+
+.projects { list-style: none; margin: 0; padding: 0; display: grid; }
+.projects li { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; padding: 18px 0; border-top: 1px solid rgb(255 255 255 / .35); align-items: baseline; }
+.projects li:last-child { border-bottom: 1px solid rgb(255 255 255 / .35); }
+.projects .pname { font-size: clamp(26px, 3.4vw, 44px); font-weight: 700; letter-spacing: -0.035em; line-height: 1; }
+.projects .pname a { text-decoration: none; display: inline-block; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.projects li:hover .pname a { transform: translateX(10px); }
+.projects .desc { grid-column: 1 / -1; opacity: .85; }
+.projects .yr { font-family: var(--mono); font-size: 13px; }
+
+.before-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(20px, 3vw, 40px); align-items: start; }
+.before-grid > * { min-width: 0; }
+.before-grid img { aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; filter: grayscale(1) contrast(1.05); transition: filter .5s; }
+.before-grid img:hover { filter: none; }
+.clients { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding: 0; list-style: none; }
+.clients li { border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent); padding: 4px 10px; border-radius: 999px; font-size: 14px; }
+
+.posts { list-style: none; margin: 0; padding: 0; }
+.posts li { border-top: 1px solid var(--line); }
+.posts li:last-child { border-bottom: 1px solid var(--line); }
+.posts a { display: grid; grid-template-columns: 96px 1fr; gap: 16px; padding: 14px 0; text-decoration: none; position: relative; }
+.posts a::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--red); transition: width .4s cubic-bezier(.2,.8,.2,1); }
+.posts a:hover::after { width: 100%; }
+.posts .d { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.posts .t { font-weight: 550; letter-spacing: -0.01em; }
+
+.foot { padding-block: 48px 96px; }
+.foot .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: baseline; justify-content: space-between; }
+.foot .big { font-size: clamp(28px, 4vw, 48px); font-weight: 750; letter-spacing: -0.04em; }
+.foot nav { display: flex; gap: 24px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  .photo-card { position: relative; right: auto; top: auto; width: 72%; margin: -36px 0 0 auto; }
+  .sheet { grid-template-columns: 1fr; top: calc(70px + var(--i) * 14px); min-height: 0; }
+  .sheet .tab { flex-direction: row; align-items: baseline; }
+  .before-grid { grid-template-columns: 1fr; }
+  .before-grid img { max-width: 260px; }
+  .posts a { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet { transform: none; filter: none; }
+  .photo-card { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <div class="logo">marc leonard</div>
+    <nav><span>home</span><a href="#">about</a><a href="#">experience</a><a href="#">odds &amp; ends</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 class="name"><span><i>marc</i></span><span><i>leonard</i></span></h1>
+    <figure class="photo-card" id="photo" style="margin:0">
+      <img src="img/me_2.jpg" alt="Marc on a beach holding a camera on a monopod">
+      <div class="tc" data-tc></div>
+    </figure>
+    <p class="lede">Software developer with 15+ years in <strong>media &amp; entertainment</strong>. I work on Ingest and Processing at <a href="https://mux.com">Mux</a>.</p>
+    <div class="meta-row">
+      <span class="label">Bozeman, Montana</span>
+      <span class="label">Python · TypeScript · C++</span>
+    </div>
+  </div>
+</section>
+
+<section class="stack" aria-label="Overview">
+  <div class="wrap">
+
+    <article class="sheet s-now" style="--i:0">
+      <div class="tab"><span class="label">now</span><span class="label">2024 —</span></div>
+      <div class="body">
+        <h2>Ingest &amp; Processing at Mux.</h2>
+        <p class="big">Before Mux I spent seven years at Cinnafilm building PixelStrings, a cloud video conversion platform for studios, broadcasters and post houses: the API, the backend, and the horizontally scaled transcode fleet underneath.</p>
+        <dl class="facts">
+          <div><dt class="label">2024 — now</dt><dd>Mux</dd></div>
+          <div><dt class="label">2017 — 2024</dt><dd>Cinnafilm · PixelStrings</dd></div>
+          <div><dt class="label">Toolkit</dt><dd>FFmpeg, gstreamer, SRT</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="sheet s-build" style="--i:1">
+      <div class="tab"><span class="label">building</span><span class="label">side projects</span></div>
+      <div class="body">
+        <h2>Always a few in the hopper.</h2>
+        <ul class="projects">
+          <li><span class="pname"><a href="https://timecodetool.com/">TimecodeTool</a></span><span class="yr">2024 —</span><span class="desc">A CLI for validating timecode and calculating spans.</span></li>
+          <li><span class="pname"><a href="https://assetveranda.com">Asset Veranda</a></span><span class="yr">2023 —</span><span class="desc">Media asset management for producers and editors.</span></li>
+          <li><span class="pname"><a href="https://linedream.marcrleonard.com">LineDream</a></span><span class="yr">2020 —</span><span class="desc">A generative art library for Python, made for pen plotters.</span></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="sheet s-before" style="--i:2">
+      <div class="tab"><span class="label">before</span><span class="label">2010 — 2019</span></div>
+      <div class="body">
+        <div class="before-grid">
+          <div>
+            <h2>A past life behind the camera.</h2>
+            <p class="big" style="margin-top:20px">Lead editor of special programming at Reelz Channel, then seven years freelancing as a director, editor and colorist.</p>
+            <ul class="clients">
+              <li>L.L.Bean</li><li>Outside Online</li><li>GoPro</li><li>The Verge</li><li>Reddit</li><li>Pop Sci</li>
+            </ul>
+            <p style="margin-top:22px"><a href="https://video.marcrleonard.com">See the reel</a></p>
+          </div>
+          <img src="img/me.jpg" alt="Portrait of Marc">
+        </div>
+      </div>
+    </article>
+
+    <article class="sheet s-write" style="--i:3">
+      <div class="tab"><span class="label">writing</span><span class="label">notes &amp; posts</span></div>
+      <div class="body">
+        <h2>Less than a blog, more than a tweet.</h2>
+        <ul class="posts">
+          <li><a href="https://marcrleonard.com/blog/2026/1/cmaf-vs-ts-metadata"><span class="d">2026·01</span><span class="t">Transport Stream vs CMAF: different philosophies for streaming metadata</span></a></li>
+          <li><a href="https://marcrleonard.com/blog/2025/5/pre-commit-hooks-spell-grammar"><span class="d">2025·05</span><span class="t">Know thyself. Automatically check spelling and grammar on git commits</span></a></li>
+          <li><a href="https://marcrleonard.com/blog/2025/2/dead-simple-goroutines-contexts-channels"><span class="d">2025·02</span><span class="t">A dead simple example of goroutines, contexts, and channels</span></a></li>
+          <li><a href="https://marcrleonard.com/blog/2025/1/understanding-cpu-specific-compilation-flags-and-intrinsics"><span class="d">2025·01</span><span class="t">Understanding CPU-specific compilation flags and intrinsics</span></a></li>
+          <li><a href="https://marcrleonard.com/blog/2024/7/fast-api-async-heavy-work"><span class="d">2024·07</span><span class="t">Running a CPU-heavy task asynchronously in FastAPI</span></a></li>
+        </ul>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="big">say hello.</div>
+    <nav><a href="https://www.linkedin.com/in/marc-leonard/">LinkedIn</a><a href="https://github.com/marcrleonard">GitHub</a><a href="https://marcrleonard.com/resume">Résumé</a></nav>
+  </div>
+</footer>
+
+<a class="back" href="index.html">← concepts</a>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const sheets = [...document.querySelectorAll(".sheet")];
+  const photo = document.getElementById("photo");
+  let ticking = false;
+  function update() {
+    ticking = false;
+    // photo drifts slower than the page, so it slides across the name
+    const y = Math.min(window.scrollY, 900);
+    photo.style.setProperty("--py", (y * -0.18).toFixed(1) + "px");
+    // each sheet recedes as the next one slides over it
+    sheets.forEach((s, i) => {
+      const next = sheets[i + 1];
+      if (!next) return;
+      const a = s.getBoundingClientRect();
+      const b = next.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, (a.bottom - b.top) / a.height));
+      s.style.setProperty("--p", p.toFixed(3));
+    });
+  }
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener("resize", update);
+  update();
+})();
+</script>
+</body>
+</html>

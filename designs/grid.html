@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grid · marc leonard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Concept C — Grid: the 12-column grid is drawn on the page, the red band and
+   clipped headline come from the current site, and cards break across columns
+   and overlap, drifting at slightly different speeds as you scroll. */
+
+.cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 20px; }
+
+.gridlines { position: fixed; inset: 0; pointer-events: none; z-index: 0; transition: opacity .4s; }
+.gridlines .wrap { height: 100%; }
+.gridlines .cols { height: 100%; }
+.gridlines span { border-inline: 1px solid color-mix(in srgb, var(--red) 12%, transparent); background: color-mix(in srgb, var(--red) 2.5%, transparent); }
+body.nogrid .gridlines { opacity: 0; }
+main, .site-head, footer { position: relative; z-index: 1; }
+
+.band { background: var(--red); color: var(--on-red); overflow: hidden; }
+.band .wrap { padding-top: clamp(24px, 4vw, 48px); }
+.band .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.band .meta .label, .band .meta .tc, .band .meta .tc b { color: var(--on-red); }
+.band h1 {
+  font-size: clamp(72px, 17.5vw, 260px); font-weight: 800; letter-spacing: -0.065em;
+  line-height: .78; margin-top: clamp(16px, 3vw, 40px); margin-bottom: -0.16em;
+  white-space: nowrap; text-transform: lowercase;
+  transform: translateX(var(--hx, 0px));
+}
+
+.stage { padding-bottom: clamp(48px, 8vw, 120px); }
+.stage .cols { align-items: start; }
+.p-photo {
+  grid-column: 1 / span 5; grid-row: 1; margin-top: clamp(-140px, -10vw, -60px);
+  background: var(--card); padding: 10px; position: relative; z-index: 2;
+}
+.p-photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; width: 100%; }
+.p-photo figcaption { display: flex; justify-content: space-between; padding: 10px 2px 2px; }
+.p-intro {
+  grid-column: 5 / span 8; grid-row: 1; margin-top: clamp(48px, 9vw, 140px);
+  background: var(--card); border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--ink);
+  padding: clamp(22px, 3.4vw, 44px); position: relative; z-index: 3;
+}
+.p-intro p.big { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.2; letter-spacing: -0.02em; }
+.p-intro p.big strong { font-weight: 700; }
+.p-intro p + p { margin-top: 18px; color: var(--muted); max-width: 56ch; }
+
+[data-speed] { transform: translate3d(0, var(--sy, 0px), 0); will-change: transform; }
+
+/* ticker */
+.ticker { border-block: 2px solid var(--ink); overflow: hidden; padding-block: 14px; position: relative; z-index: 1; background: var(--paper); }
+.ticker .track { display: flex; width: max-content; animation: tick 48s linear infinite; }
+.ticker:hover .track { animation-play-state: paused; }
+.ticker ul { display: flex; gap: 40px; padding: 0 20px; margin: 0; list-style: none; font-size: clamp(20px, 2.6vw, 32px); font-weight: 650; letter-spacing: -0.03em; white-space: nowrap; }
+.ticker li::after { content: "●"; color: var(--red); font-size: .5em; vertical-align: middle; margin-left: 40px; }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* overlapping project cards that step across the grid */
+.projects { padding-block: clamp(56px, 8vw, 120px); }
+.sect-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+.sect-head h2 { font-size: clamp(36px, 5vw, 64px); font-weight: 800; letter-spacing: -0.05em; }
+.steps .cols { grid-auto-rows: auto; }
+.proj {
+  position: relative; padding: clamp(20px, 2.6vw, 32px); min-height: 260px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 28px;
+  border: 2px solid var(--ink); text-decoration: none;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s cubic-bezier(.2,.8,.2,1);
+}
+.proj:hover, .proj:focus-visible { transform: translate(-6px, -6px); box-shadow: 12px 12px 0 var(--ink); z-index: 9; }
+.proj h3 { font-size: clamp(30px, 3.6vw, 52px); font-weight: 800; letter-spacing: -0.05em; line-height: .95; }
+.proj p { max-width: 34ch; }
+.proj .row { display: flex; justify-content: space-between; gap: 12px; }
+.proj:nth-child(1) { grid-column: 1 / span 6; grid-row: 1; background: var(--card); z-index: 1; }
+.proj:nth-child(2) { grid-column: 5 / span 5; grid-row: 1; margin-top: 150px; background: var(--red); color: var(--on-red); z-index: 2; }
+.proj:nth-child(2) .label { color: inherit; }
+.proj:nth-child(3) { grid-column: 8 / span 5; grid-row: 1; margin-top: 300px; background: var(--ink); color: var(--paper); z-index: 3; }
+.proj:nth-child(3) .label { color: inherit; opacity: .75; }
+
+.history { padding-block: clamp(48px, 7vw, 100px); border-top: 2px solid var(--ink); }
+.history ol { list-style: none; padding: 0; margin: 0; }
+.history li { padding-block: 18px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.history .yr { grid-column: 1 / span 2; font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.history .what { grid-column: 3 / span 4; font-size: clamp(20px, 2vw, 26px); font-weight: 700; letter-spacing: -0.03em; }
+.history .why { grid-column: 7 / span 6; color: var(--muted); }
+.history li.now .yr { color: var(--red); }
+
+.writing { padding-block: clamp(48px, 7vw, 100px) 120px; border-top: 2px solid var(--ink); }
+.writing .cols { row-gap: 20px; }
+.post {
+  grid-column: span 4; background: var(--card); border: 1px solid var(--line); padding: 20px;
+  display: flex; flex-direction: column; gap: 40px; justify-content: space-between; text-decoration: none; min-height: 190px;
+  transition: border-color .2s, transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.post:hover { border-color: var(--red); transform: translateY(-4px); }
+.post .t { font-size: 19px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.25; }
+.post .y { font-size: 44px; font-weight: 800; letter-spacing: -0.05em; color: var(--red); line-height: .8; font-variant-numeric: tabular-nums; }
+
+.toggle {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60;
+  font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em;
+  background: var(--card); color: var(--ink); border: 1px solid var(--line); padding: 10px 14px; border-radius: 999px; cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .cols { column-gap: 12px; }
+  .p-photo { grid-column: 1 / span 8; }
+  .p-intro { grid-column: 3 / span 10; grid-row: 2; margin-top: -80px; }
+  .proj:nth-child(n) { grid-column: 1 / -1; grid-row: auto; margin-top: -24px; min-height: 0; }
+  .proj:nth-child(1) { margin-top: 0; margin-right: 12%; }
+  .proj:nth-child(2) { margin-inline: 6% 6%; }
+  .proj:nth-child(3) { margin-left: 12%; }
+  .history .yr { grid-column: 1 / -1; }
+  .history .what { grid-column: 1 / -1; }
+  .history .why { grid-column: 1 / -1; }
+  .post { grid-column: span 6; }
+}
+@media (max-width: 520px) {
+  .gridlines .cols span:nth-child(n+7) { display: none; }
+  .gridlines .cols { grid-template-columns: repeat(6, 1fr); }
+  .post { grid-column: 1 / -1; }
+  .p-intro { box-shadow: 6px 6px 0 var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) { [data-speed], .band h1 { transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="gridlines" aria-hidden="true"><div class="wrap"><div class="cols"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div></div>
+
+<header class="site-head">
+  <div class="wrap">
+    <div class="logo">marc leonard</div>
+    <nav><span>home</span><a href="#">about</a><a href="#">experience</a><a href="#">odds &amp; ends</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="band">
+    <div class="wrap">
+      <div class="meta"><span class="label">software developer · media &amp; entertainment</span><span class="tc" data-tc></span></div>
+      <h1 id="headline">marc leonard</h1>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="wrap cols">
+      <figure class="p-photo" data-speed="-0.06" style="margin:0">
+        <img src="img/me_2.jpg" alt="Marc on a beach holding a camera on a monopod">
+        <figcaption><span class="label">fig. 1</span><span class="label">director → developer</span></figcaption>
+      </figure>
+      <div class="p-intro" data-speed="0.05">
+        <p class="big">I've spent <strong>15+ years</strong> in media &amp; entertainment. These days I write software on the Ingest and Processing team at <a href="https://mux.com">Mux</a>.</p>
+        <p>Before code I was a video director and wore most of the hats in post-production. I live in Bozeman, Montana, where the skiing, mountain biking and hiking are the main event.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-label="Tools and projects">
+    <div class="track">
+      <ul><li>TimecodeTool</li><li>Asset Veranda</li><li>LineDream</li><li>FFmpeg</li><li>gstreamer</li><li>SRT</li><li>Python</li><li>TypeScript</li><li>C++</li><li>Terraform</li></ul>
+      <ul aria-hidden="true"><li>TimecodeTool</li><li>Asset Veranda</li><li>LineDream</li><li>FFmpeg</li><li>gstreamer</li><li>SRT</li><li>Python</li><li>TypeScript</li><li>C++</li><li>Terraform</li></ul>
+    </div>
+  </div>
+
+  <section class="projects steps">
+    <div class="wrap">
+      <div class="sect-head"><h2>in the hopper</h2><span class="label">side projects</span></div>
+      <div class="cols">
+        <a class="proj" href="https://timecodetool.com/">
+          <div><h3>TimecodeTool</h3><p style="margin-top:10px">A timecode CLI for validation and calculations.</p></div>
+          <div class="row"><span class="label">2024 —</span><span class="label">cli</span></div>
+        </a>
+        <a class="proj" href="https://assetveranda.com">
+          <div><h3>Asset Veranda</h3><p style="margin-top:10px">Media asset management for producers and editors.</p></div>
+          <div class="row"><span class="label">2023 —</span><span class="label">web app</span></div>
+        </a>
+        <a class="proj" href="https://linedream.marcrleonard.com">
+          <div><h3>LineDream</h3><p style="margin-top:10px">Generative art for SVG and pen plotters.</p></div>
+          <div class="row"><span class="label">2020 —</span><span class="label">python library</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="history">
+    <div class="wrap">
+      <div class="sect-head"><h2>experience</h2><a href="https://marcrleonard.com/resume">PDF résumé</a></div>
+      <ol>
+        <li class="cols now"><span class="yr">2024 — now</span><span class="what">Mux</span><span class="why">Video software developer, Ingest and Processing.</span></li>
+        <li class="cols"><span class="yr">2017 — 2024</span><span class="what">Cinnafilm</span><span class="why">Core backend developer for PixelStrings, a cloud video conversion platform.</span></li>
+        <li class="cols"><span class="yr">2012 — 2019</span><span class="what">Director &amp; post</span><span class="why">Freelance for L.L.Bean, Outside Online, GoPro, The Verge, Reddit and Pop Sci. <a href="https://video.marcrleonard.com">Reel</a></span></li>
+        <li class="cols"><span class="yr">2011 — 2013</span><span class="what">Reelz Channel</span><span class="why">Lead editor of special programming.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="writing">
+    <div class="wrap">
+      <div class="sect-head"><h2>odds &amp; ends</h2><span class="label">notes</span></div>
+      <div class="cols">
+        <a class="post" href="https://marcrleonard.com/blog/2026/1/cmaf-vs-ts-metadata"><span class="t">Transport Stream vs CMAF: different philosophies for streaming metadata</span><span class="y">26</span></a>
+        <a class="post" href="https://marcrleonard.com/blog/2025/5/pre-commit-hooks-spell-grammar"><span class="t">Automatically check spelling and grammar on git commits</span><span class="y">25</span></a>
+        <a class="post" href="https://marcrleonard.com/blog/2025/2/dead-simple-goroutines-contexts-channels"><span class="t">A dead simple example of goroutines, contexts, and channels</span><span class="y">25</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a class="back" href="index.html">← concepts</a>
+<button class="toggle" id="gt" type="button">grid: on</button>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  const gt = document.getElementById("gt");
+  const setGrid = (on) => { document.body.classList.toggle("nogrid", !on); gt.textContent = "grid: " + (on ? "on" : "off"); };
+  gt.addEventListener("click", () => setGrid(document.body.classList.contains("nogrid")));
+  addEventListener("keydown", (e) => { if ((e.key === "g" || e.key === "G") && !e.metaKey && !e.ctrlKey) gt.click(); });
+
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const layers = [...document.querySelectorAll("[data-speed]")];
+  const head = document.getElementById("headline");
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const y = scrollY;
+    head.style.setProperty("--hx", (y * -0.25).toFixed(1) + "px");
+    layers.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const cur = parseFloat(el.style.getPropertyValue("--sy")) || 0;
+      const off = (r.top - cur + r.height / 2 - innerHeight / 2);
+      el.style.setProperty("--sy", (off * parseFloat(el.dataset.speed)).toFixed(1) + "px");
+    });
+  }
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
+</script>
+</body>
+</html>
