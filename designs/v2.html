@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-vol="medium">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -22,7 +22,36 @@
   --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --gutter: clamp(16px, 4vw, 48px);
   --ease: cubic-bezier(.2, .8, .2, 1);
+  /* volume: loud is round 2 as first shown; medium and quiet override below */
+  --bw: 2px;                 /* card border */
+  --card-edge: var(--ink);   /* card border color */
+  --sh: 8px;                 /* hard shadow offset */
+  --sh-hover: 11px;
+  --photo-sh: var(--red);
+  --sheet-edge: var(--ink);
+  --h1: clamp(30px, 3.6vw, 48px);  --h1w: 750;
+  --h2: clamp(36px, 5.4vw, 72px);  --h2w: 800;
+  --h3w: 750;
+  --year: 44px;
+  --build-bg: var(--red); --build-fg: var(--on-red); --build-edge: var(--red);
   color-scheme: light;
+}
+:root[data-vol="medium"] {
+  --sh: 5px; --sh-hover: 8px;
+  --h1: clamp(28px, 3.1vw, 40px);  --h1w: 700;
+  --h2: clamp(32px, 4.2vw, 54px);  --h2w: 750;
+  --h3w: 700;
+  --year: 36px;
+  --build-bg: var(--card); --build-fg: var(--ink); --build-edge: var(--ink);
+}
+:root[data-vol="quiet"] {
+  --bw: 1px; --card-edge: var(--line); --sheet-edge: var(--line);
+  --sh: 0px; --sh-hover: 5px; --photo-sh: transparent;
+  --h1: clamp(26px, 2.7vw, 34px);  --h1w: 600;
+  --h2: clamp(26px, 3vw, 38px);    --h2w: 700;
+  --h3w: 650;
+  --year: 28px;
+  --build-bg: var(--card); --build-fg: var(--ink); --build-edge: var(--line);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --paper: #0e1013; --card: #171a1f; --ink: #eef1f4; --muted: #98a2ae; --line: #2a3038; --red: #e8392b; color-scheme: dark; }
@@ -49,17 +78,17 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 .site-head nav span { color: var(--muted); }
 
 /* the card language: 2px ink border + hard offset shadow */
-.hard { background: var(--card); border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+.hard { background: var(--card); border: var(--bw) solid var(--card-edge); box-shadow: var(--sh) var(--sh) 0 var(--ink); }
 a.hard, .lift { transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
-a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ink); }
+a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3px); box-shadow: var(--sh-hover) var(--sh-hover) 0 var(--ink); border-color: var(--ink); }
 
 /* ---------- hero ---------- */
 .hero { padding-block: clamp(32px, 6vw, 80px) clamp(64px, 9vw, 128px); }
 .hero .cols { align-items: start; }
-.photo { grid-column: 1 / span 5; grid-row: 1; margin: 0; padding: 10px; box-shadow: 8px 8px 0 var(--red); border-color: var(--ink); position: relative; z-index: 1; }
+.photo { grid-column: 1 / span 5; grid-row: 1; margin: 0; padding: 10px; box-shadow: var(--sh) var(--sh) 0 var(--photo-sh); position: relative; z-index: 1; }
 .photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; width: 100%; }
 .intro { grid-column: 5 / span 8; grid-row: 1; margin-top: clamp(56px, 9vw, 120px); padding: clamp(24px, 3.6vw, 48px); position: relative; z-index: 2; }
-.intro h1 { font-size: clamp(30px, 3.6vw, 48px); font-weight: 750; letter-spacing: -0.04em; line-height: 1.04; }
+.intro h1 { font-size: var(--h1); font-weight: var(--h1w); letter-spacing: -0.04em; line-height: 1.04; }
 .intro h1 em { font-style: normal; color: var(--red); }
 .intro p { margin-top: 20px; color: var(--muted); max-width: 54ch; }
 .intro p strong { color: var(--ink); font-weight: 600; }
@@ -72,20 +101,21 @@ a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3p
 
 /* ---------- sheets: sections that overlap as you scroll ---------- */
 .sheets { display: grid; gap: 32px; padding-bottom: 96px; }
-.sheet { position: sticky; top: calc(68px + var(--i) * 14px); padding: clamp(24px, 4vw, 52px); border: 2px solid var(--ink); }
+.sheet { position: sticky; top: calc(68px + var(--i) * 14px); padding: clamp(24px, 4vw, 52px); border: var(--bw) solid var(--sheet-edge); }
 .sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px); }
-.sheet h2 { font-size: clamp(36px, 5.4vw, 72px); font-weight: 800; letter-spacing: -0.055em; line-height: .9; }
+.sheet h2 { font-size: var(--h2); font-weight: var(--h2w); letter-spacing: -0.055em; line-height: .9; }
 .kicker { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 
-.s-build { background: var(--red); color: var(--on-red); border-color: var(--red); }
+.s-build { background: var(--build-bg); color: var(--build-fg); border-color: var(--build-edge); }
 .s-build .kicker { color: inherit; opacity: .8; }
+:root[data-vol="medium"] .s-build { border-top: 8px solid var(--red); }
 .s-exp { background: var(--card); }
 .s-notes { background: var(--paper); }
 
 /* building: three cards inside the red sheet */
 .projects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .proj { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 22px; min-height: 230px; text-decoration: none; color: var(--ink); }
-.proj h3 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 750; letter-spacing: -0.04em; line-height: 1; }
+.proj h3 { font-size: clamp(22px, 2.2vw, 30px); font-weight: var(--h3w); letter-spacing: -0.04em; line-height: 1; }
 .proj p { margin-top: 10px; color: var(--muted); font-size: 15px; }
 .proj .meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .proj .meta b { color: var(--red); font-weight: 600; }
@@ -105,11 +135,11 @@ a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3p
 .note:hover, .note:focus-visible { border-color: var(--ink); transform: translateY(-3px); }
 .note .t { font-size: 18px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.28; }
 .note .bot { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
-.note .y { font-size: 44px; font-weight: 800; letter-spacing: -0.05em; line-height: .8; color: var(--red); font-variant-numeric: tabular-nums; }
+.note .y { font-size: var(--year); font-weight: 800; letter-spacing: -0.05em; line-height: .8; color: var(--red); font-variant-numeric: tabular-nums; }
 .note .tag { font-size: 13px; color: var(--muted); }
 
 .foot { padding-block: 24px 120px; }
-.foot .inner { display: flex; justify-content: space-between; align-items: baseline; gap: 16px 32px; flex-wrap: wrap; border-top: 2px solid var(--ink); padding-top: 28px; }
+.foot .inner { display: flex; justify-content: space-between; align-items: baseline; gap: 16px 32px; flex-wrap: wrap; border-top: var(--bw) solid var(--sheet-edge); padding-top: 28px; }
 .foot .big { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.045em; }
 .foot nav { display: flex; gap: 24px; flex-wrap: wrap; }
 
@@ -118,6 +148,10 @@ a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3p
   display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--ink); color: var(--paper);
   font: 600 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .06em;
 }
+.vol { left: auto; right: 16px; view-transition-name: vol; }
+.vol button { font: inherit; text-transform: inherit; letter-spacing: inherit; border: 0; background: none; color: inherit; padding: 6px 10px; border-radius: 999px; cursor: pointer; opacity: .7; }
+.vol button[aria-pressed="true"] { background: var(--paper); color: var(--ink); opacity: 1; }
+.vol button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 .switcher a, .switcher span { padding: 6px 10px; border-radius: 999px; text-decoration: none; color: inherit; }
 .switcher a { opacity: .7; }
 .switcher span { background: var(--red); color: var(--on-red); }
@@ -141,8 +175,6 @@ a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3p
   .projects, .notes { grid-template-columns: 1fr; }
   .projects .proj:last-child, .notes .note:nth-child(n+5) { display: flex; }
   .jobs .yr, .jobs .what, .jobs .why { grid-column: 1 / -1; }
-  .hard { box-shadow: 6px 6px 0 var(--ink); }
-  .photo { box-shadow: 6px 6px 0 var(--red); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -223,9 +255,26 @@ a.hard:hover, a.hard:focus-visible, .lift:hover { transform: translate(-3px, -3p
   </div></div>
 </footer>
 
+<div class="switcher vol" role="group" aria-label="Volume">
+  <button type="button" data-v="loud">loud</button><button type="button" data-v="medium">medium</button><button type="button" data-v="quiet">quiet</button>
+</div>
 <nav class="switcher" aria-label="Concepts"><a href="index.html">all</a><span aria-current="page">round 2</span></nav>
 
 <script>
+// volume switch: loud / medium / quiet. #loud etc. in the URL picks one too.
+(function () {
+  const root = document.documentElement, btns = document.querySelectorAll(".vol button");
+  const valid = ["loud", "medium", "quiet"];
+  const set = (v) => {
+    root.dataset.vol = v;
+    btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+    try { localStorage.setItem("vol", v); } catch (e) {}
+  };
+  let start = location.hash.slice(1);
+  if (!valid.includes(start)) { try { start = localStorage.getItem("vol"); } catch (e) {} }
+  set(valid.includes(start) ? start : "medium");
+  btns.forEach((b) => b.addEventListener("click", () => set(b.dataset.v)));
+})();
 // hairline under the header once the page has scrolled
 const head = document.getElementById("head");
 const onScroll = () => head.classList.toggle("scrolled", scrollY > 8);
