@@ -171,6 +171,11 @@ for file in os.listdir("source/blog"):
 			"nav_active": "/odds-ends",
 		}))
 
+	# "Status: hidden" renders the page at its URL but keeps it out of
+	# the blog listing and RSS (e.g. placeholders behind a printed QR code)
+	if str(metadata.get('status', '')).lower() == 'hidden':
+		continue
+
 	NEWS_ITEMS.append(news_item)
 
 NEWS_ITEMS.sort(key = lambda x:x['date'])
