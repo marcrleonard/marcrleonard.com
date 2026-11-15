@@ -6,18 +6,17 @@ My personal website. It's a small static site: `main.py` renders Jinja templates
 
 - **Production:** pushes to `master` build and deploy to https://marcrleonard.com.
 - **Previews:** any other branch gets its own Cloudflare Pages preview URL, posted as a check on its pull request.
-- **Build command:** `python3 main.py`, output directory `build/`.
+- **Build command:** `./build.sh`, output directory `build/`. It installs [uv](https://docs.astral.sh/uv/) if the image lacks it, then runs `uv run --locked main.py`. uv downloads a prebuilt Python (version from `requires-python` in `pyproject.toml`), so don't set `PYTHON_VERSION` in Cloudflare: that makes the image compile Python from source.
 - **Daily rebuild:** `.github/workflows/touch-and-commit.yml` commits `timestamp.txt` once a day, which triggers a fresh build so the Letterboxd movies stay current.
 
 ## Building locally
 
 ```sh
-pip install -r requirements.txt
-CF_PAGES=1 python3 main.py          # build with site-relative links, like Cloudflare
+CF_PAGES=1 uv run main.py           # build with site-relative links, like Cloudflare
 python3 -m http.server 8000 -d build
 ```
 
-Then open http://localhost:8000. Without `CF_PAGES=1`, links are prefixed with the `full_url` in `main.py`, which is set up for PyCharm's built-in server at `localhost:63342`.
+Then open http://localhost:8000. Dependencies are in `pyproject.toml` and pinned in `uv.lock`; add one with `uv add <package>`. Without `CF_PAGES=1`, links are prefixed with the `full_url` in `main.py`, which is set up for PyCharm's built-in server at `localhost:63342`.
 
 The build fetches the Letterboxd RSS feed. If it can't reach Letterboxd, the build still succeeds and the movies section shows a link to the profile instead.
 

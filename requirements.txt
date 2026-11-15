@@ -1,4 +1,0 @@
-Jinja2==3.0.3
-pelican
-Markdown
-requests
